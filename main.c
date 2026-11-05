@@ -325,6 +325,9 @@ static uint16_t sound_rate,sound_length;
 #if defined(_SDL)
 #include "sdl_vid.h"
 #endif
+#if defined(__amigaos__)
+#include "amiga_port.h"
+#endif
 
 /* Open the sound device, unless sound was disabled on the command line. Done
    here rather than in inir() so that /Q is already known. */
@@ -371,6 +374,9 @@ int main(int argc,char *argv[])
 {
   int rval;
 
+#if defined(__amigaos__)
+  amiga_init(); /* PROGDIR:User, and SDL shut down at any exit */
+#endif
   digger_log_start(); /* Log times count from here */
 #if defined(__EMSCRIPTEN__)
   ems_store_restore(ININAME); /* Settings saved by a previous visit */
@@ -606,6 +612,14 @@ int mainprog(void)
 
 void finish(void)
 {
+#if defined(__amigaos__)
+  /* Also called at exit (amiga/amiga_digger.c): once is enough */
+  static bool finished = false;
+
+  if (finished)
+    return;
+  finished = true;
+#endif
   killsound();
   soundoff();
   soundkillglob();
@@ -1240,6 +1254,8 @@ static void inir(void)
 
 #if defined(UNIX) || defined(DIGGER_DEBUG)
   digger_log = stderr;
+#elif defined(__amigaos__)
+  digger_log = fopen("PROGDIR:User/DIGGER.log", "w+");
 #else
   digger_log = fopen("DIGGER.log", "w+");
 #endif
