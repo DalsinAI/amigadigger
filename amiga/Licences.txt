@@ -1,0 +1,55 @@
+Digger Remastered for AmigaOS 3.x: licences
+===========================================
+
+The game: Digger (1983) by Windmill Software (Rob Sleath); Digger
+Remastered (1998-2004) by Andrew Jenner, https://www.digger.org; the SDL,
+Unix and network version (Digger Reloaded) by Maksym Sobolyev and others,
+https://github.com/sobomax/digger.
+
+- Digger Remastered is under the GNU General Public License, version 2
+  (COPYING.txt, upstream's pkg/windows/LICENSE). digger.txt ("Is this
+  legal?") tells how: Rob Sleath, the original author, gave Andrew Jenner
+  the copyright to Digger Remastered, who licensed it under the GNU GPL.
+  The game's original copyright message ("Portions Copyright (c) 1983
+  Windmill Software Inc.") is kept in the program.
+- Some files are under other licences, as their headers say: sdl_kbd.c,
+  sdl_vid.c and others by Maxim Sobolev are "Beer-Ware" (keep the notice,
+  do what you want); microsippy's usipy_str.c is BSD 2-Clause (Copyright
+  (c) 2020, Maksym Sobolyev; its notice follows); mackron's md5.c is
+  public domain or MIT-0. Upstream's debian/copyright: "This source tree
+  contains files under several licenses, including public domain,
+  Beer-Ware, BSD-2-Clause, and GNU General Public License version 2."
+- The graphics, sounds and levels are part of the program's source (no
+  separate data files).
+- The icon art (pkg/windows/digger.ico, used for the Workbench icons)
+  comes with the GPL source.
+- The Amiga port's own files (amiga/) are GPL 2, like the program.
+  Copyright (c) 2026 AmiCradle Team.
+
+microsippy (BSD 2-Clause):
+
+  Copyright (c) 2020, Maksym Sobolyev
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are
+  met:
+
+  1. Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
