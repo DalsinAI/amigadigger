@@ -16,3 +16,4 @@ CPackSourceConfig.cmake
 Makefile
 cmake_install.cmake
 deps/
+build/

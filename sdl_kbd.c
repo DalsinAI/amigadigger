@@ -35,7 +35,11 @@ int keycodes[NKEYS][5]={{SDL_SCANCODE_RIGHT,-2,-2,-2,-2}, /* 1 Right */
                      {SDL_SCANCODE_KP_MINUS,-2,-2,-2,-2}, /* Brake */
                      {SDL_SCANCODE_F7,-2,-2,-2,-2},       /* Music */
                      {SDL_SCANCODE_F9,-2,-2,-2,-2},       /* Sound */
+#if defined(__amigaos__)
+                     {SDL_SCANCODE_F10,SDL_SCANCODE_ESCAPE,-2,-2,-2}, /* Exit */
+#else
                      {SDL_SCANCODE_F10,-2,-2,-2,-2},      /* Exit */
+#endif
                      {SDL_SCANCODE_SPACE,-2,-2,-2,-2},    /* Pause */
                      {SDL_SCANCODE_N,-2,-2,-2,-2},        /* Change mode */
                      {SDL_SCANCODE_F8,-2,-2,-2,-2},       /* Save DRF */
@@ -62,6 +66,12 @@ static int Handler(void *uptr, SDL_Event *event)
 		 * Ignore Alt, so that Alt-Enter does not start the game or
 		 * unpause it.
 		 */
+#if defined(__amigaos__)
+		/* Right Amiga+Q quits, as the close gadget does */
+		if (event->key.keysym.scancode == SDL_SCANCODE_Q &&
+		    (event->key.keysym.mod & KMOD_RGUI) != 0)
+			exit(0);
+#endif
 		if (event->key.keysym.scancode == SDL_SCANCODE_RALT ||
 		    event->key.keysym.scancode == SDL_SCANCODE_LALT)
 			goto out;

@@ -1,0 +1,80 @@
+# Digger Remastered (Digger Reloaded) for AmigaOS 3.x, 68040/68060 + FPU,
+# on GFOpenGPU's SDL 2.
+#
+#   make -f amiga/Makefile.amigaos -j4 [STOVE=/path/to/os32-gcc16-open6]
+#
+# STOVE is a GFOpenAmigaGCC 16.2.0-open6 stove: its prefix/ has the
+# compiler, the NDK and GFOpenGPU's SDL 2 kit (prefix/m68k-amigaos), and
+# zlib under prefix/m68k-amigaos/port-deps. The game's graphics and sounds
+# are in the program; the settings (DIGGER.INI) and the high scores go to
+# PROGDIR:User/.
+#
+# Output: build/amigaos/Digger/ (the drawer: Digger, ReadMe, the game's
+# own digger.txt, the licences, User/, with GlowIcons),
+# build/amigaos/Digger.info and Install-Digger beside them.
+
+STOVE   ?= $(HOME)/AmiCradle/stoves/os32-gcc16-open6
+PREFIX  ?= $(STOVE)/prefix
+SDL2KIT ?= $(PREFIX)/m68k-amigaos
+ZLIB    ?= $(PREFIX)/m68k-amigaos/port-deps
+CC      = $(PREFIX)/bin/m68k-amigaos-gcc
+CPU     ?= -m68040 -m68881
+# -fno-tree-loop-distribute-patterns: GCC 16's loop miscompile (the kit's
+# sdl2-config gives it for GCC 16 too).
+OPT     ?= -O2 -fomit-frame-pointer -fno-tree-loop-distribute-patterns
+
+# As upstream's GNUmakefile (production, the WebAssembly set of files: the
+# network play's SIP stack is left out, netsim_stubs.c stands in).
+DEFS    = -D__amigaos__ -D_SDL -D_SDL_SOUND -DNO_SND_FILTER
+INC     = -I. -Iamiga -I$(SDL2KIT)/include/SDL2 -I$(ZLIB)/include
+CFLAGS  = -noixemul $(OPT) $(CPU) -std=gnu11 -Wall $(DEFS) $(INC)
+LDFLAGS = -noixemul $(CPU)
+LIBS    = -L$(SDL2KIT)/lib -L$(ZLIB)/lib -lSDL2 -lz -lm -lpthread -latomic
+
+BUILD   = build/amigaos
+OBJDIR  = $(BUILD)/obj
+OUT     = $(BUILD)/Digger
+PROG    = Digger
+
+SRC     = main.c digger.c drawing.c sprite.c scores.c record.c edrf.c \
+          edrf_feed.c sound.c sound_backend.c newsnd.c ini.c input.c \
+          monster.c bags.c alpha.c vgagrafx.c title_gz.c icon.c sdl_kbd.c \
+          sdl_vid.c sdl_timer.c sdl_snd.c digger_math.c monster_obj.c \
+          digger_obj.c bullet_obj.c title_anim.c cgagrafx.c keyboard.c \
+          soundgen.c spinlock.c game.c digger_log.c netsim_stubs.c \
+          netsim_friends.c netsim_instrument.c netsim_debug.c netsim_game.c \
+          state_hash.c microsippy/src/external/mackron_md5/md5.c \
+          microsippy/src/usipy_str.c \
+          $(wildcard amiga/*.c)
+OBJS    = $(SRC:%.c=$(OBJDIR)/%.o)
+
+all: $(OUT)/$(PROG) package
+
+$(OUT)/$(PROG): $(OBJS)
+	@mkdir -p $(OUT)
+	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+
+package: $(OUT)/$(PROG) AMIGA_PORT.md digger.txt README.md amiga/Licences.txt pkg/windows/LICENSE
+	mkdir -p $(OUT)/User
+	cp AMIGA_PORT.md $(OUT)/ReadMe
+	cp digger.txt $(OUT)/digger.txt
+	cp README.md $(OUT)/ReadMe-Digger
+	cp pkg/windows/LICENSE $(OUT)/COPYING.txt
+	cp amiga/Licences.txt $(OUT)/Licences.txt
+	cp amiga/icons/Digger.info amiga/icons/ReadMe.info $(OUT)/
+	for f in digger.txt ReadMe-Digger COPYING.txt Licences.txt; do \
+	    cp amiga/icons/ReadMe.info $(OUT)/$$f.info; done
+	cp amiga/icons/Data.info $(OUT)/User.info
+	cp amiga/icons/Digger-drawer.info $(BUILD)/Digger.info
+	cp amiga/Install-Digger amiga/Install-Digger.info $(BUILD)/
+
+$(OBJDIR)/%.o: %.c $(wildcard *.h amiga/*.h)
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+objs: $(OBJS)
+
+clean:
+	rm -rf $(BUILD)
+
+.PHONY: all package objs clean

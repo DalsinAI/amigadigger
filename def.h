@@ -75,7 +75,10 @@
 #define farfree free
 #define farcoreleft coreleft
 
-#if defined(__FreeBSD__) && defined _VGL
+#if defined(__amigaos__)
+/* The drawer's User drawer (amiga/amiga_digger.c makes it) */
+#define ININAME "PROGDIR:User/DIGGER.INI"
+#elif defined(__FreeBSD__) && defined _VGL
 /* Applications using FreeBSD's console graphics running as root */
 #define ININAME "/var/games/digger/digger.rc"
 #elif defined UNIX && !defined _VGL && !defined(__EMSCRIPTEN__)

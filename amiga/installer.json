@@ -1,0 +1,14 @@
+{
+  "name": "Digger Remastered",
+  "version": "20261014-amigaos3",
+  "drawer": "Digger",
+  "program": "Digger",
+  "cpu": "68040",
+  "fpu": true,
+  "space": 1500000,
+  "modules": ["SDL2.module"],
+  "keep": ["User"],
+  "parent": "Work:Games",
+  "badge": "icons/art/digger.png",
+  "script": "Install-Digger"
+}
