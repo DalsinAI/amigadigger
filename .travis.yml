@@ -1,0 +1,39 @@
+dist: xenial
+sudo: required
+language: c
+compiler:
+  - clang
+  - gcc
+before_install:
+  - pip install --user cpp-coveralls
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - cmake
+      - cmake-data
+      - gcc-5
+      - libsdl2-dev
+env:
+  global:
+    - COVERALLS_PARALLEL=true
+  matrix:
+    - MAKE_ENV="CI_COVERAGE=1 TEST_TYPE=short" TARGET="do-test"
+    - MAKE_ENV="CI_COVERAGE=1 TEST_TYPE=long" TARGET="do-test"
+    - MAKE_ENV="CI_COVERAGE=1 TEST_TYPE=xlong" TARGET="do-test"
+    - MAKE_ENV="TEST_TYPE=short" TARGET="do-test-cmake"
+    - MAKE_ENV="TEST_TYPE=long" TARGET="do-test-cmake"
+    - MAKE_ENV="TEST_TYPE=xlong" TARGET="do-test-cmake"
+script:
+  - if [ "${CC}" = "gcc" ]; then CC="gcc-5"; fi
+  - make ${MAKE_ENV} "${TARGET}"
+after_success:
+  - if [ "${CC}" = "gcc-5" -a "${TARGET}" = "do-test" ];
+    then
+      rm debug/*.gcno;
+      coveralls --exclude CMakeFiles --gcov gcov-5 --gcov-options '\-lp';
+    fi
+notifications:
+  webhooks: https://coveralls.io/webhook

@@ -1,0 +1,52 @@
+image: Visual Studio 2022
+version: 1.0.{build}
+
+environment:
+  MSYS2_ROOT: C:\msys64
+  DIGGER_WARNINGS_AS_ERRORS: "ON"
+
+build_script:
+- cmd: >-
+    for /f "usebackq eol=# tokens=1,* delims==" %%A in ("scripts\dep-versions.sub") do set "%%A=%%B"
+
+    if not defined SDL_VER set "SDL_VER=%SDL_VER_DEFAULT%"
+
+    if not defined ZLIB_VER set "ZLIB_VER=%ZLIB_VER_DEFAULT%"
+
+    echo === Environment ====================================================
+
+    echo APPVEYOR_PROJECT_NAME=%APPVEYOR_PROJECT_NAME%
+
+    echo APPVEYOR_BUILD_NUMBER=%APPVEYOR_BUILD_NUMBER%
+
+    echo APPVEYOR_BUILD_VERSION=%APPVEYOR_BUILD_VERSION%
+
+    echo APPVEYOR_BUILD_WORKER_IMAGE=%APPVEYOR_BUILD_WORKER_IMAGE%
+
+    set PATH=%MSYS2_ROOT%\usr\bin;%PATH%
+
+    set MSYSTEM=MINGW64
+
+    set CHERE_INVOKING=1
+
+    echo === Install MSYS2 toolchain ========================================
+
+    %MSYS2_ROOT%\usr\bin\bash -lc "pacman --noconfirm -Syuu"
+
+    %MSYS2_ROOT%\usr\bin\bash -lc "pacman --noconfirm -Syuu"
+
+    %MSYS2_ROOT%\usr\bin\bash -lc "pacman --noconfirm -S --needed make zip mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils"
+
+    echo === Build Digger ===================================================
+
+    %MSYS2_ROOT%\usr\bin\bash -lc "cd $(cygpath -u '%APPVEYOR_BUILD_FOLDER%') && SDL_VER='%SDL_VER%' ZLIB_VER='%ZLIB_VER%' sh -x ./scripts/do-build-windows.sh"
+
+    echo === Create Installer ===============================================
+
+    %MSYS2_ROOT%\usr\bin\bash -lc "cd $(cygpath -u '%APPVEYOR_BUILD_FOLDER%') && touch digger.sco digger.ini digger.log && APPVEYOR_BUILD_VERSION='%APPVEYOR_BUILD_VERSION%' '/c/Program Files (x86)/Inno Setup 6/iscc.exe' pkg/windows/digger.iss"
+
+    copy pkg\windows\DiggerRemastered-Setup.exe
+
+artifacts:
+- path: digger-win64.zip
+- path: DiggerRemastered-Setup.exe

@@ -1,0 +1,35 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export CC = clang
+export CXX = clang++
+export DEB_CFLAGS_MAINT_APPEND = -gdwarf-4
+export DEB_CXXFLAGS_MAINT_APPEND = -gdwarf-4
+export DEB_LDFLAGS_MAINT_APPEND = -fuse-ld=lld -Wl,--build-id=sha1
+
+%:
+	dh $@ --buildsystem=cmake --builddirectory=build-debian-production
+
+override_dh_auto_configure:
+	. scripts/cmake_flags.sub && \
+		dh_auto_configure --builddirectory=build-debian-production -- \
+			$${CMAKE_FLAGS_relwithdebinfo} $${CMAKE_FLAGS_PRODUCTION} && \
+		dh_auto_configure --builddirectory=build-debian-instrumentation -- \
+			$${CMAKE_FLAGS_relwithdebinfo} $${CMAKE_FLAGS_TEST}
+
+override_dh_auto_build:
+	dh_auto_build --builddirectory=build-debian-production
+	dh_auto_build --builddirectory=build-debian-instrumentation
+
+override_dh_auto_test:
+	dh_auto_test --builddirectory=build-debian-production
+	dh_auto_test --builddirectory=build-debian-instrumentation
+
+override_dh_auto_install:
+	dh_auto_install --builddirectory=build-debian-production --destdir=debian/tmp
+	install -D -m 0755 build-debian-instrumentation/digger \
+		debian/tmp/usr/lib/digger/digger-instrumented
+
+override_dh_auto_clean:
+	dh_auto_clean --builddirectory=build-debian-production
+	dh_auto_clean --builddirectory=build-debian-instrumentation

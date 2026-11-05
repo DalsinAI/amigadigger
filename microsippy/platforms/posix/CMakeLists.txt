@@ -1,0 +1,120 @@
+cmake_minimum_required(VERSION 3.5)
+if (POLICY CMP0069)
+  cmake_policy(SET CMP0069 NEW)
+endif()
+project (usipy_test)
+find_package (Threads)
+include (CheckIPOSupported)
+include (CheckSymbolExists)
+check_symbol_exists(clock_nanosleep "time.h" HAVE_CLOCK_NANOSLEEP)
+check_symbol_exists(TIMER_ABSTIME "time.h" HAVE_TIMER_ABSTIME)
+
+include (TestBigEndian)
+TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
+
+add_executable(usipy_test "usipy_test.c" "usipy_stdout_watch.c")
+add_executable(usipy_test_uac "usipy_test_uac.c" "usipy_tm_uac.c")
+add_executable(usipy_test_ua "usipy_test_ua.c")
+add_executable(usipy_register_cli "usipy_register_cli.c" "usipy_tm_uac.c" "usipy_tm_uac_cli.c")
+add_executable(ua_cli "ua_cli.c" "usipy_tm_uac.c" "usipy_tm_uac_cli.c")
+add_subdirectory(../../src microsippy)
+target_include_directories(usipy_test PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+)
+target_include_directories(usipy_test_uac PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+)
+target_include_directories(usipy_test_ua PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+)
+target_include_directories(usipy_register_cli PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+)
+target_include_directories(ua_cli PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+)
+target_include_directories(microsippy PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_sources(microsippy PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/usipy_platform_default.c"
+)
+target_compile_definitions(microsippy PRIVATE HAVE_CMAKE_SYMBOL_CHECKS=1)
+if (HAVE_CLOCK_NANOSLEEP)
+  target_compile_definitions(microsippy PRIVATE HAVE_CLOCK_NANOSLEEP=1)
+endif()
+if (HAVE_TIMER_ABSTIME)
+  target_compile_definitions(microsippy PRIVATE HAVE_TIMER_ABSTIME=1)
+endif()
+target_link_libraries(usipy_test PRIVATE
+  microsippy
+  ${CMAKE_THREAD_LIBS_INIT}
+)
+target_link_libraries(usipy_test_uac PRIVATE
+  microsippy
+)
+target_link_libraries(usipy_test_ua PRIVATE
+  microsippy
+)
+target_link_libraries(usipy_register_cli PRIVATE
+  microsippy
+)
+target_link_libraries(ua_cli PRIVATE
+  microsippy
+)
+
+set(POSIX_TARGETS
+  microsippy
+  usipy_test
+  usipy_test_uac
+  usipy_test_ua
+  usipy_register_cli
+  ua_cli
+)
+
+foreach(target ${POSIX_TARGETS})
+  set_property(TARGET ${target} PROPERTY C_STANDARD 11)
+  target_compile_options(${target} PRIVATE
+    -march=native
+    -O2
+    -g3
+    -fvisibility=hidden
+  )
+  set_target_properties(${target} PROPERTIES
+    C_VISIBILITY_PRESET hidden
+  )
+endforeach()
+
+IF (IS_BIG_ENDIAN)
+    target_compile_definitions(microsippy PRIVATE -DUSIPY_BIGENDIAN=1)
+    target_compile_definitions(usipy_test PRIVATE -DUSIPY_BIGENDIAN=1)
+    target_compile_definitions(usipy_test_uac PRIVATE -DUSIPY_BIGENDIAN=1)
+    target_compile_definitions(usipy_test_ua PRIVATE -DUSIPY_BIGENDIAN=1)
+    target_compile_definitions(usipy_register_cli PRIVATE -DUSIPY_BIGENDIAN=1)
+    target_compile_definitions(ua_cli PRIVATE -DUSIPY_BIGENDIAN=1)
+ELSE (IS_BIG_ENDIAN)
+    target_compile_definitions(microsippy PRIVATE -DUSIPY_BIGENDIAN=0)
+    target_compile_definitions(usipy_test PRIVATE -DUSIPY_BIGENDIAN=0)
+    target_compile_definitions(usipy_test_uac PRIVATE -DUSIPY_BIGENDIAN=0)
+    target_compile_definitions(usipy_test_ua PRIVATE -DUSIPY_BIGENDIAN=0)
+    target_compile_definitions(usipy_register_cli PRIVATE -DUSIPY_BIGENDIAN=0)
+    target_compile_definitions(ua_cli PRIVATE -DUSIPY_BIGENDIAN=0)
+ENDIF (IS_BIG_ENDIAN)
+
+enable_testing()
+
+add_test(NAME basic COMMAND
+  ${CMAKE_COMMAND} -E env BUILDDIR=${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}/../../scripts/do-test.sh ${CMAKE_SOURCE_DIR}
+)
+add_test(NAME usipy_test_uac COMMAND usipy_test_uac)
+add_test(NAME usipy_test_ua COMMAND usipy_test_ua)
+
+check_ipo_supported(RESULT USIPY_POSIX_IPO_SUPPORTED OUTPUT USIPY_POSIX_IPO_OUTPUT LANGUAGES C)
+if (USIPY_POSIX_IPO_SUPPORTED)
+  foreach(target ${POSIX_TARGETS})
+    set_property(TARGET ${target} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  endforeach()
+else()
+  message(STATUS "IPO/LTO disabled for POSIX targets: ${USIPY_POSIX_IPO_OUTPUT}")
+endif()

@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>D I G G E R</title>
+  <!-- The game's window icon (icon.c), 64x64 PNG -->
+  <link rel="icon" type="image/png" href="data:image/png;base64,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">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #c0c0c0;
+      font-family: 'Press Start 2P', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    .header {
+      padding: 24px 0 12px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #33ff33;
+      text-shadow: 0 0 20px #33ff3366, 0 0 40px #33ff3333;
+      letter-spacing: 0.3em;
+    }
+
+    .subtitle {
+      font-size: 9px;
+      color: #888;
+      margin-top: 8px;
+      letter-spacing: 0.15em;
+      font-family: monospace;
+    }
+
+    .game-wrap {
+      position: relative;
+      width: min(640px, calc(100vw - 24px));
+      aspect-ratio: 640 / 400;
+      margin: 12px auto;
+      border: 2px solid #222;
+      border-radius: 4px;
+      box-shadow: 0 0 30px #000, 0 0 2px #33ff3322;
+      background: #000;
+      line-height: 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .controls-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      padding: 8px 20px;
+      border: 1px solid #33ff33;
+      background: transparent;
+      color: #33ff33;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      transition: all 0.15s;
+    }
+    .btn:hover {
+      background: #33ff3318;
+      box-shadow: 0 0 12px #33ff3333;
+    }
+    .btn:active {
+      background: #33ff3330;
+    }
+
+    .instructions {
+      max-width: 640px;
+      padding: 20px 24px;
+      text-align: center;
+    }
+
+    .instructions h2 {
+      font-size: 11px;
+      color: #33ff33;
+      margin-bottom: 14px;
+    }
+
+    .keys {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    .keytable {
+      border-collapse: separate;
+      border-spacing: 6px 5px;
+    }
+
+    .keytable th {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      font-weight: normal;
+      color: #33ff33;
+      text-align: left;
+      padding-bottom: 2px;
+    }
+
+    .keytable td.label {
+      text-align: right;
+      padding-right: 4px;
+    }
+
+    .keytable td.label.after {
+      text-align: left;
+      padding-right: 14px;
+    }
+
+    .keys-note {
+      margin-top: 12px;
+      color: #777;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .key {
+      display: inline-block;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 1px 7px;
+      font-size: 11px;
+      color: #e0e0e0;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .label {
+      color: #777;
+      font-size: 11px;
+    }
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 0.4s;
+    }
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-text {
+      font-size: 12px;
+      color: #33ff33;
+      margin-bottom: 16px;
+    }
+
+    .progress-bar {
+      width: 200px;
+      height: 4px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #33ff33;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    .footer {
+      padding: 16px 0 24px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 10px;
+      color: #444;
+    }
+    .footer a {
+      color: #33ff3388;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      color: #33ff33;
+    }
+
+    @media (max-width: 700px) {
+      .title { font-size: 20px; }
+      .header { padding: 16px 0 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">D I G G E R</div>
+    <div class="subtitle">REMASTERED &mdash; WINDMILL SOFTWARE 1983</div>
+  </div>
+
+  <div class="game-wrap" id="game-wrap">
+    <div class="loading-overlay" id="loading">
+      <div class="loading-text" id="status">Loading...</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+  </div>
+
+  <div class="controls-bar">
+    <button class="btn" id="btn-fullscreen">Alt-Enter FULLSCREEN</button>
+  </div>
+
+  <div class="instructions">
+    <h2>CONTROLS</h2>
+    <!-- Filled in by renderKeymap(): defaults first, then the game's own -->
+    <div class="keys" id="keys"></div>
+    <div class="keys-note">
+      Player 2 keys apply to the two-player modes.
+      Press <span class="key" id="key-redefine-note">K</span> on the title screen to redefine keys.
+    </div>
+  </div>
+
+  <div class="footer">
+    <a id="build-link" href="https://github.com/sobomax/digger">github</a>
+  </div>
+
+  <script src="digger-build-info.js"></script>
+  <script>
+    var buildLinkElement = document.getElementById('build-link');
+    var statusElement = document.getElementById('status');
+    var progressFill = document.getElementById('progress-fill');
+    var gameWrapElement = document.getElementById('game-wrap');
+    var loadingOverlay = document.getElementById('loading');
+    var canvasElement = document.getElementById('canvas');
+    var windowedCanvasWidth = 640;
+    var windowedCanvasHeight = 400;
+
+    var configureBuildLink = function() {
+      var buildInfo;
+      var linkText;
+
+      if (typeof window.getDiggerBuildInfo !== 'function') {
+        return;
+      }
+      buildInfo = window.getDiggerBuildInfo();
+      if (!buildInfo || !buildInfo.revision) {
+        return;
+      }
+      linkText = 'github @ ' + (buildInfo.shortRevision || buildInfo.revision);
+      if (buildInfo.dirty) {
+        linkText += ' dirty';
+      }
+      buildLinkElement.href = buildInfo.revisionUrl || buildLinkElement.href;
+      buildLinkElement.textContent = linkText;
+    };
+
+    configureBuildLink();
+
+    var restoreWindowedCanvasSize = function() {
+      canvasElement.style.removeProperty('width');
+      canvasElement.style.removeProperty('height');
+      gameWrapElement.style.removeProperty('width');
+      gameWrapElement.style.removeProperty('height');
+      if (Module.setCanvasSize) {
+        Module.setCanvasSize(windowedCanvasWidth, windowedCanvasHeight);
+      } else {
+        canvasElement.width = windowedCanvasWidth;
+        canvasElement.height = windowedCanvasHeight;
+      }
+    };
+
+    document.addEventListener('fullscreenchange', function() {
+      if (!document.fullscreenElement) {
+        restoreWindowedCanvasSize();
+      }
+    });
+
+    /*
+     * Nearest-neighbour ("pixelated") scaling only looks right when every
+     * game pixel maps onto a whole number of device pixels. With e.g. 125%
+     * or 150% display scaling it duplicates some rows/columns but not
+     * others, which makes the edges jagged, so smooth the canvas then.
+     */
+    var updateCanvasSmoothing = function() {
+      var dpr = window.devicePixelRatio || 1;
+      var sx = canvasElement.clientWidth * dpr / canvasElement.width;
+      var sy = canvasElement.clientHeight * dpr / canvasElement.height;
+      var whole = function(v) {
+        return v >= 1 && Math.abs(v - Math.round(v)) < 0.01;
+      };
+
+      canvasElement.style.imageRendering =
+        (whole(sx) && whole(sy)) ? 'pixelated' : 'auto';
+    };
+
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(updateCanvasSmoothing).observe(canvasElement);
+    }
+    window.addEventListener('resize', updateCanvasSmoothing);
+    updateCanvasSmoothing();
+
+    document.getElementById('btn-fullscreen').addEventListener('click', function() {
+      Module._digger_request_fullscreen();
+      canvasElement.focus();
+    });
+
+    /*
+     * Keep the CONTROLS panel in sync with the game's key bindings: the game
+     * calls window.diggerKeymapChanged() at startup and after the keys have
+     * been redefined, and digger_get_keymap() returns them as JSON.
+     */
+    var keyGlyphs = {Up: '↑', Down: '↓', Left: '←', Right: '→'};
+
+    /* Short labels for SDL's longer key names so the tables stay compact */
+    var keyShort = {
+      'Numlock': 'NumLk', 'CapsLock': 'Caps', 'ScrollLock': 'ScrLk',
+      'PageUp': 'PgUp', 'PageDown': 'PgDn', 'Insert': 'Ins', 'Delete': 'Del',
+      'Backspace': 'BkSp', 'Return': 'Enter', 'Escape': 'Esc',
+      'PrintScreen': 'PrtSc', 'Application': 'Menu'
+    };
+
+    var keyLabel = function(name) {
+      if (keyGlyphs[name])
+        return keyGlyphs[name];
+      if (keyShort[name])
+        return keyShort[name];
+      return name.replace(/^Keypad /, 'KP ').replace(/^Left /, 'L ')
+        .replace(/^Right /, 'R ');
+    };
+
+    var defaultKeymap = {
+      p1: {up: 'Up', down: 'Down', left: 'Left', right: 'Right', fire: 'F1'},
+      p2: {up: 'W', down: 'Z', left: 'A', right: 'S', fire: 'Tab'},
+      music: 'F7', sound: 'F9', pause: 'Space', mode: 'N', redefine: 'K',
+      exit: 'F10'
+    };
+
+    var renderKeymap = function(km) {
+      var keysElement = document.getElementById('keys');
+      var el = function(tag, cls, text) {
+        var e = document.createElement(tag);
+        if (cls)
+          e.className = cls;
+        if (text !== undefined)
+          e.textContent = text;
+        return e;
+      };
+      var keyCell = function(name) {
+        var td = el('td');
+        td.appendChild(el('span', 'key', keyLabel(name)));
+        return td;
+      };
+      var players = el('table', 'keytable');
+      var game = el('table', 'keytable');
+      var tr, th;
+
+      /* Player keys: one row per action, a column per player */
+      tr = el('tr');
+      tr.appendChild(el('th'));
+      tr.appendChild(el('th', null, 'PLAYER 1'));
+      tr.appendChild(el('th', null, 'PLAYER 2'));
+      players.appendChild(tr);
+      [['up', 'Up'], ['down', 'Down'], ['left', 'Left'], ['right', 'Right'],
+       ['fire', 'Fire']].forEach(function(act) {
+        tr = el('tr');
+        tr.appendChild(el('td', 'label', act[1]));
+        tr.appendChild(keyCell(km.p1[act[0]]));
+        tr.appendChild(keyCell(km.p2[act[0]]));
+        players.appendChild(tr);
+      });
+
+      /* Game keys: two key/label pairs per row */
+      tr = el('tr');
+      th = el('th', null, 'GAME');
+      th.colSpan = 4;
+      tr.appendChild(th);
+      game.appendChild(tr);
+      [[[km.music, 'Music On/Off'], [km.mode, 'Game Mode']],
+       [[km.sound, 'Sound On/Off'], [km.redefine, 'Redefine Keys']],
+       [[km.pause, 'Pause'], [km.exit, 'Exit Game']]].forEach(function(row) {
+        tr = el('tr');
+        row.forEach(function(pair) {
+          tr.appendChild(keyCell(pair[0]));
+          tr.appendChild(el('td', 'label after', pair[1]));
+        });
+        game.appendChild(tr);
+      });
+
+      keysElement.textContent = '';
+      keysElement.appendChild(players);
+      keysElement.appendChild(game);
+      document.getElementById('key-redefine-note').textContent =
+        keyLabel(km.redefine);
+    };
+
+    renderKeymap(defaultKeymap);
+
+    window.diggerKeymapChanged = function() {
+      try {
+        renderKeymap(JSON.parse(Module.UTF8ToString(Module._digger_get_keymap())));
+      } catch (e) {
+        console.error('keymap update failed:', e);
+      }
+    };
+
+    var setStatus = function(text) {
+      if (!setStatus.last) setStatus.last = { time: Date.now(), text: '' };
+      if (text === setStatus.last.text) return;
+      var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+      var now = Date.now();
+      if (m && now - setStatus.last.time < 30) return;
+      setStatus.last.time = now;
+      setStatus.last.text = text;
+      if (m) {
+        var pct = (parseInt(m[2]) / parseInt(m[4])) * 100;
+        progressFill.style.width = pct + '%';
+        statusElement.textContent = m[1].trim() || 'Loading...';
+      } else {
+        if (!text) {
+          loadingOverlay.classList.add('hidden');
+          updateCanvasSmoothing(); /* the canvas has its real size by now */
+          canvasElement.focus();
+        } else {
+          statusElement.textContent = text;
+        }
+      }
+    };
+
+    var Module = {
+      print: function() {
+        var text = Array.prototype.slice.call(arguments).join(' ');
+        console.log(text);
+      },
+      canvas: canvasElement,
+      setStatus: setStatus,
+      totalDependencies: 0,
+      monitorRunDependencies: function(left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        setStatus(left
+          ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')'
+          : 'All downloads complete.');
+      }
+    };
+
+    setStatus('Downloading...');
+
+    window.onerror = function(event) {
+      statusElement.textContent = 'Error - see console';
+      setStatus = function(text) {
+        if (text) console.error('[post-exception] ' + text);
+      };
+    };
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>
